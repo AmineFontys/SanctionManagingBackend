@@ -1,4 +1,8 @@
 
+using Microsoft.EntityFrameworkCore;
+using SanctionManagingBackend.Data.Dal;
+using System;
+
 namespace SanctionManagingBackend
 {
     public class Program
@@ -8,6 +12,9 @@ namespace SanctionManagingBackend
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            builder.Services.AddDbContext<SactionContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
