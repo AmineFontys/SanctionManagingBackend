@@ -1,6 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
-using SanctionManagingBackend.Data.Dal;
+using SanctionManagingBackend.Data.DBcontext;
 using System;
 
 namespace SanctionManagingBackend

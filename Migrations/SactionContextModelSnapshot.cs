@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SanctionManagingBackend.Data.Dal;
+using SanctionManagingBackend.Data.DBcontext;
 
 #nullable disable
 
