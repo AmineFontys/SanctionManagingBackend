@@ -1,6 +1,9 @@
-﻿namespace SanctionManagingBackend.DAL.Interface
+﻿using SanctionManagingBackend.Data.Entity;
+
+namespace SanctionManagingBackend.DAL.Interface
 {
-    public interface IEmployeeRepository
+    public interface IEmployeeRepository : IGenericRepository<Employee>
     {
+
     }
 }

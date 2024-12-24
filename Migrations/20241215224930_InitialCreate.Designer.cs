@@ -10,7 +10,7 @@ using SanctionManagingBackend.Data.DBcontext;
 
 namespace SanctionManagingBackend.Migrations
 {
-    [DbContext(typeof(SactionContext))]
+    [DbContext(typeof(SanctionContext))]
     [Migration("20241215224930_InitialCreate")]
     partial class InitialCreate
     {

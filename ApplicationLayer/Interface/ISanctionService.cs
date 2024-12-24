@@ -1,6 +1,9 @@
-﻿namespace SanctionManagingBackend.ApplicationLayer.Interface
+﻿using SanctionManagingBackend.Data.Entity;
+using SanctionManagingBackend.DTO;
+
+namespace SanctionManagingBackend.ApplicationLayer.Interface
 {
-    public interface ISanctionService
+    public interface ISanctionService : IGenericService<Sanction, SanctionDTO>
     {
     }
 }

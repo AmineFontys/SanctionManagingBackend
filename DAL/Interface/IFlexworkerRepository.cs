@@ -1,6 +1,10 @@
-﻿namespace SanctionManagingBackend.DAL.Interface
+﻿using SanctionManagingBackend.Data.Entity;
+
+namespace SanctionManagingBackend.DAL.Interface
 {
-    public interface IFlexworkerRepository
+    public interface IFlexworkerRepository: IGenericRepository<Flexworker>
     {
+        Task<IEnumerable<Flexworker>> GetByFullNameAsync(string fullName);
+
     }
 }

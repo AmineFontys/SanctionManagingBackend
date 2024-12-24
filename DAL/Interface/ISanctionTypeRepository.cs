@@ -1,6 +1,8 @@
-﻿namespace SanctionManagingBackend.DAL.Interface
+﻿using SanctionManagingBackend.Data.Entity;
+
+namespace SanctionManagingBackend.DAL.Interface
 {
-    public interface ISanctionTypeRepository
+    public interface ISanctionTypeRepository : IGenericRepository<SanctionType>
     {
     }
 }

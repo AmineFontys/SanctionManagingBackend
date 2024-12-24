@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SanctionManagingBackend.Data.DBcontext;
 
@@ -10,9 +11,11 @@ using SanctionManagingBackend.Data.DBcontext;
 namespace SanctionManagingBackend.Migrations
 {
     [DbContext(typeof(SanctionContext))]
-    partial class SactionContextModelSnapshot : ModelSnapshot
+    [Migration("20241217221331_addingfkEmployeeToSanction")]
+    partial class addingfkEmployeeToSanction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,12 +36,7 @@ namespace SanctionManagingBackend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("LastName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SanctionManagingBackend.Data.DBcontext;
 
@@ -10,9 +11,11 @@ using SanctionManagingBackend.Data.DBcontext;
 namespace SanctionManagingBackend.Migrations
 {
     [DbContext(typeof(SanctionContext))]
-    partial class SactionContextModelSnapshot : ModelSnapshot
+    [Migration("20241217220916_addingtables")]
+    partial class addingtables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,12 +36,7 @@ namespace SanctionManagingBackend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("LastName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -110,9 +108,6 @@ namespace SanctionManagingBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
                     b.Property<int>("FlexworkerId")
                         .HasColumnType("int");
 
@@ -120,8 +115,6 @@ namespace SanctionManagingBackend.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("FlexworkerId");
 
@@ -159,12 +152,6 @@ namespace SanctionManagingBackend.Migrations
 
             modelBuilder.Entity("SanctionManagingBackend.Data.Entity.Sanction", b =>
                 {
-                    b.HasOne("SanctionManagingBackend.Data.Entity.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SanctionManagingBackend.Data.Entity.Flexworker", "Flexworker")
                         .WithMany("Sanctions")
                         .HasForeignKey("FlexworkerId")
@@ -176,8 +163,6 @@ namespace SanctionManagingBackend.Migrations
                         .HasForeignKey("SanctionTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Employee");
 
                     b.Navigation("Flexworker");
 

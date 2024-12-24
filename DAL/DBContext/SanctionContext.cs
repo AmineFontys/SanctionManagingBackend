@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace SanctionManagingBackend.Data.DBcontext
 {
-    public class SactionContext : DbContext
+    public class SanctionContext : DbContext
     {
-        public SactionContext(DbContextOptions<SactionContext> options) : base(options)
+        public SanctionContext(DbContextOptions<SanctionContext> options) : base(options)
         {
         }
 

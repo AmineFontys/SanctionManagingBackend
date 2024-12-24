@@ -5,7 +5,8 @@ namespace SanctionManagingBackend.Data.Entity
 {
     public class Sanction
     {
-        [Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
         public Flexworker Flexworker { get; set; }
@@ -15,5 +16,9 @@ namespace SanctionManagingBackend.Data.Entity
         public SanctionType SanctionType { get; set; }
         [Required]
         public int SanctionTypeId { get; set; }
+        [Required]
+        public Employee Employee { get; set; }
+        [Required]
+        public int EmployeeId { get; set; }
     }
 }
