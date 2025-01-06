@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SanctionManagingBackend.Data.DBcontext;
 
@@ -11,9 +12,11 @@ using SanctionManagingBackend.Data.DBcontext;
 namespace SanctionManagingBackend.Migrations
 {
     [DbContext(typeof(SanctionContext))]
-    partial class SactionContextModelSnapshot : ModelSnapshot
+    [Migration("20250105233158_UpdateSanctionTypeWord2")]
+    partial class UpdateSanctionTypeWord2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

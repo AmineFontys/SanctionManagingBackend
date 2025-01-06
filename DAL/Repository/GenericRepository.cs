@@ -27,6 +27,7 @@ namespace SanctionManagingBackend.DAL.Repository
 
         public async Task AddAsync(T entity)
         {
+
             await _dbSet.AddAsync(entity);
         }
 
@@ -35,8 +36,15 @@ namespace SanctionManagingBackend.DAL.Repository
             _dbSet.Update(entity);
         }
 
-        public void Delete(T entity)
+        public void Delete(int id)
         {
+            var entity = _dbSet.Find(id);
+
+            if (entity == null)
+            {
+                throw new ArgumentException($"Entity met ID {id} niet gevonden.");
+            }
+
             _dbSet.Remove(entity);
         }
 

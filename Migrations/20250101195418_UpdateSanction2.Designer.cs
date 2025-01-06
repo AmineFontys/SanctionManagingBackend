@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SanctionManagingBackend.Data.DBcontext;
 
@@ -11,9 +12,11 @@ using SanctionManagingBackend.Data.DBcontext;
 namespace SanctionManagingBackend.Migrations
 {
     [DbContext(typeof(SanctionContext))]
-    partial class SactionContextModelSnapshot : ModelSnapshot
+    [Migration("20250101195418_UpdateSanction2")]
+    partial class UpdateSanction2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,16 +123,12 @@ namespace SanctionManagingBackend.Migrations
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FlexworkerId")
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("PdfFile")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("SanctionType")
+                    b.Property<string>("FilledText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("FlexworkerId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -159,12 +158,12 @@ namespace SanctionManagingBackend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("WordBase64")
+                    b.Property<string>("TemplateText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 

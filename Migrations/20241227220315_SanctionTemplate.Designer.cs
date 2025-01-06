@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SanctionManagingBackend.Data.DBcontext;
 
@@ -11,9 +12,11 @@ using SanctionManagingBackend.Data.DBcontext;
 namespace SanctionManagingBackend.Migrations
 {
     [DbContext(typeof(SanctionContext))]
-    partial class SactionContextModelSnapshot : ModelSnapshot
+    [Migration("20241227220315_SanctionTemplate")]
+    partial class SanctionTemplate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,9 +92,6 @@ namespace SanctionManagingBackend.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<bool>("IsMale")
-                        .HasColumnType("bit");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -117,25 +117,29 @@ namespace SanctionManagingBackend.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("EmployeeId")
+                    b.Property<int>("CreatedById")
                         .HasColumnType("int");
+
+                    b.Property<int>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FilledText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("FlexworkerId")
                         .HasColumnType("int");
 
-                    b.Property<byte[]>("PdfFile")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("SanctionType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("SanctionTypeId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("CreatedById");
 
                     b.HasIndex("FlexworkerId");
+
+                    b.HasIndex("SanctionTypeId");
 
                     b.ToTable("Sanctions");
                 });
@@ -159,12 +163,12 @@ namespace SanctionManagingBackend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("WordBase64")
+                    b.Property<string>("TemplateText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -173,9 +177,9 @@ namespace SanctionManagingBackend.Migrations
 
             modelBuilder.Entity("SanctionManagingBackend.Data.Entity.Sanction", b =>
                 {
-                    b.HasOne("SanctionManagingBackend.Data.Entity.Employee", "Employee")
+                    b.HasOne("SanctionManagingBackend.Data.Entity.Employee", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("EmployeeId")
+                        .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -185,9 +189,17 @@ namespace SanctionManagingBackend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Employee");
+                    b.HasOne("SanctionManagingBackend.Data.Entity.SanctionType", "SanctionType")
+                        .WithMany()
+                        .HasForeignKey("SanctionTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatedBy");
 
                     b.Navigation("Flexworker");
+
+                    b.Navigation("SanctionType");
                 });
 
             modelBuilder.Entity("SanctionManagingBackend.Data.Entity.Flexworker", b =>

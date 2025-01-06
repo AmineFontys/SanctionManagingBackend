@@ -11,7 +11,7 @@
       "applicationUrl": "http://localhost:5127"
     },
     "https": {
-      "commandName": "Project",
+      "commandName": "IISExpress",
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {

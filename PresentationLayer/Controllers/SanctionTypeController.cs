@@ -42,17 +42,43 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
             return Ok(sanctionType);
         }
 
-        [HttpPost("Add")]
-        public async Task<ActionResult<SanctionTypeDTO>> Add(SanctionTypeDTO sanctionType)
+        //[HttpPost("Create")]
+        //public async Task<ActionResult<SanctionTypeDTO>> Add(SanctionTypeDTO sanctionType)
+        //{
+        //    if (sanctionType == null)
+        //    {
+        //        return BadRequest("Sanctietype is leeg.");
+        //    }
+
+        //    await _service.AddAsync(sanctionType);
+
+        //    return Ok();
+        //}
+
+        [HttpPost("create")]
+        public async Task<IActionResult> Create([FromForm] CreateSanctionTypeDTO dto)
         {
-            if (sanctionType == null)
+            if (dto == null)
+                return BadRequest("Er is geen data aangeleverd.");
+
+            if (dto.WordFile == null || dto.WordFile.Length == 0)
+                return BadRequest("Word-bestand (.docx) is vereist.");
+
+            using var ms = new MemoryStream();
+            await dto.WordFile.CopyToAsync(ms);
+            var fileBytes = ms.ToArray();
+            var base64Docx = Convert.ToBase64String(fileBytes);
+
+            var sanctionTypeToSave = new SanctionTypeDTO
             {
-                return BadRequest("Sanctietype is leeg.");
-            }
+                Name = dto.Name,
+                Description = dto.Description,
+                CreatedAt = DateTime.Now,
+                WordBase64 = base64Docx
+            };
 
-            await _service.AddAsync(sanctionType);
-
-            return Ok();
+            await _service.AddAsync(sanctionTypeToSave);
+            return Ok("Nieuw sanction type succesvol aangemaakt!");
         }
 
         [HttpPut("Update")]
@@ -71,14 +97,7 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
         [HttpDelete("Delete/{id}")]
         public async Task<ActionResult<SanctionTypeDTO>> Delete(int id)
         {
-            var sanctionType = await _service.GetByIdAsync(id);
-
-            if (sanctionType == null)
-            {
-                return NotFound($"Geen sanctietype gevonden met id: {id}");
-            }
-
-            await _service.DeleteAsync(sanctionType);
+            await _service.DeleteAsync(id);
 
             return Ok();
         }

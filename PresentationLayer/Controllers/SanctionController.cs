@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SanctionManagingBackend.ApplicationLayer.Interface;
+using SanctionManagingBackend.ApplicationLayer.Service;
+using SanctionManagingBackend.Data.Entity;
 using SanctionManagingBackend.DTO;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace SanctionManagingBackend.PresentationLayer.Controllers
 {
@@ -10,10 +14,13 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
     public class SanctionController : ControllerBase
     {
         private readonly ISanctionService _service;
+        private readonly WordConverter _wordConverter;
 
-        public SanctionController(ISanctionService service)
+
+        public SanctionController(ISanctionService service, WordConverter wordConverter)
         {
             _service = service;
+            _wordConverter = wordConverter;
         }
 
         [HttpGet("GetAll")]
@@ -29,6 +36,24 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
             return Ok(sanctions);
         }
 
+        [HttpGet("GetByFlexworker/{flexworkerId}")]
+        public async Task<IActionResult> GetByFlexworker(int flexworkerId)
+        {
+            try
+            {
+                var sanctions = await _service.GetSanctionsByFlexworkerIdAsync(flexworkerId);
+
+                if (sanctions == null || !sanctions.Any())
+                    return Ok(new List<SanctionDTO>());
+
+                return Ok(sanctions);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Interne fout: {ex.Message}");
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<SanctionDTO>> GetById(int id)
         {
@@ -42,18 +67,79 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
             return Ok(sanction);
         }
 
-        [HttpPost("Add")]
-        public async Task<ActionResult<SanctionDTO>> Add(SanctionDTO sanction)
+        [HttpPost("Create")]
+        public async Task<ActionResult<SanctionDTO>> Create(SanctionDTO sanctionDto)
         {
-            if (sanction == null)
+            if (sanctionDto == null)
             {
-                return BadRequest("Sanctie is leeg.");
+                return BadRequest("Ongeldige invoer.");
             }
+            
+            await _service.AddAsync(sanctionDto);
 
-            await _service.AddAsync(sanction);
-
-            return Ok();
+            return Ok("Sanctie succesvol aangemaakt.");
         }
+
+        [HttpPost("generate")]
+        public IActionResult Generate([FromBody] GenerateSanctionRequest request)
+        {
+            try
+            {
+                // Validatie van de request
+                if (request == null || string.IsNullOrEmpty(request.WordBase64) || request.Placeholders == null)
+                {
+                    return BadRequest("Invalid request payload.");
+                }
+
+                // 1. Base64 -> byte[]
+                byte[] docxBytes;
+                try
+                {
+                    docxBytes = Convert.FromBase64String(request.WordBase64);
+                }
+                catch (FormatException fe)
+                {
+                    Console.WriteLine($"Format Error: {fe.Message}");
+                    return BadRequest("Invalid Base64 string.");
+                }
+                Console.WriteLine("DOCX bytes gedecodeerd.");
+
+                // 2. Placeholder-vervanging met Open XML SDK
+                byte[] updatedDocxBytes = WordTemplateProcessor.ReplacePlaceholders(docxBytes, request.Placeholders);
+                Console.WriteLine("Placeholders vervangen.");
+
+                // **Nieuw: Sla het aangepaste DOCX-bestand op voor inspectie (optioneel)**
+                var inspectDocxPath = Path.Combine(Path.GetTempPath(), $"inspect-{Guid.NewGuid()}.docx");
+                System.IO.File.WriteAllBytes(inspectDocxPath, updatedDocxBytes);
+                Console.WriteLine($"Aangepast DOCX voor inspectie opgeslagen op: {inspectDocxPath}");
+
+                // 3. Converteer DOCX naar PDF met Word Interop
+                byte[] pdfBytes = _wordConverter.ConvertDocxToPdf(updatedDocxBytes);
+                Console.WriteLine("DOCX geconverteerd naar PDF.");
+
+                // **Optioneel: Sla het PDF-bestand ook op voor inspectie**
+                var inspectPdfPath = Path.Combine(Path.GetTempPath(), $"inspect-{Guid.NewGuid()}.pdf");
+                System.IO.File.WriteAllBytes(inspectPdfPath, pdfBytes);
+                Console.WriteLine($"Gegenereerd PDF voor inspectie opgeslagen op: {inspectPdfPath}");
+
+                // 4. Stuur PDF terug
+                return File(pdfBytes, "application/pdf", "sanctie.pdf");
+            }
+            catch (COMException comEx)
+            {
+                Console.WriteLine($"COM Exception: {comEx.Message}");
+                return StatusCode(500, $"Fout bij het starten van Word Interop: {comEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Fout: {ex.Message}");
+                return StatusCode(500, $"Fout bij genereren van de sanctie: {ex.Message}");
+            }
+        }
+
+
+
+
 
         [HttpPut("Update")]
         public async Task<ActionResult<SanctionDTO>> Update(SanctionDTO sanction)
@@ -68,17 +154,26 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
             return Ok();
         }
 
-        [HttpDelete("Delete")]
-        public async Task<ActionResult> Delete(SanctionDTO sanction)
+        [HttpDelete("Delete/{id}")]
+        public async Task<ActionResult> Delete(int id)
         {
-            if (sanction == null)
-            {
-                return BadRequest("Sanctie is leeg.");
-            }
 
-            await _service.DeleteAsync(sanction);
+            await _service.DeleteAsync(id);
 
             return Ok();
+        }
+
+        [HttpGet("downloadPdf/{sanctionId}")]
+        public async Task<IActionResult> DownloadPdf(int sanctionId)
+        {
+            var pdfData = await _service.GetSanctionPdfAsync(sanctionId);
+
+            if (pdfData == null)
+            {
+                return NotFound("Sanctie of PDF niet gevonden.");
+            }
+
+            return File(pdfData, "application/pdf", $"Sanctie_{sanctionId}.pdf");
         }
     }
 }

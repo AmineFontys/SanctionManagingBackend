@@ -7,18 +7,13 @@ namespace SanctionManagingBackend.Data.Entity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        [Required]
-        public Flexworker Flexworker { get; set; }
-        [Required]
-        public int FlexworkerId { get; set; }
-        [Required]
-        public SanctionType SanctionType { get; set; }
-        [Required]
-        public int SanctionTypeId { get; set; }
-        [Required]
-        public Employee Employee { get; set; }
-        [Required]
-        public int EmployeeId { get; set; }
+        public int Id { get; set; } // Unieke ID voor de sanctie
+        public int FlexworkerId { get; set; } // Verwijzing naar de flexkracht
+        public Flexworker Flexworker { get; set; } // Navigatie-eigenschap naar de flexkracht
+        public byte[] PdfFile { get; set; } // De volledig ingevulde brieftekst
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow; // Datum van aanmaak
+        public int EmployeeId { get; set; } // ID van de gebruiker die de sanctie heeft aangemaakt
+        public Employee Employee { get; set; } // Navigatie-eigenschap naar de gebruiker
+        public string SanctionType { get; set; } // Type sanctie
     }
 }

@@ -21,7 +21,15 @@ namespace SanctionManagingBackend
 
             builder.Services.AddDbContext<SanctionContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend", builder =>
+                {
+                    builder.WithOrigins("http://localhost:8080") // Vervang door je frontend URL
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -41,6 +49,7 @@ namespace SanctionManagingBackend
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("AllowFrontend");
 
             app.UseAuthorization();
 
@@ -59,6 +68,13 @@ namespace SanctionManagingBackend
             builder.Services.AddScoped<IFlexworkerService, FlexworkerService>();
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+            builder.Services.AddScoped<ISanctionRepository, SanctionRepository>();
+            builder.Services.AddScoped<ISanctionService, SanctionService>();
+            builder.Services.AddScoped<ISanctionTypeRepository, SanctionTypeRepository>();
+            builder.Services.AddScoped<ISanctionTypeService, SanctionTypeService>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped< WordConverter>();
+
         }
     }
 }

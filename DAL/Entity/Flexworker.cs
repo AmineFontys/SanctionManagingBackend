@@ -22,6 +22,7 @@ namespace SanctionManagingBackend.Data.Entity
         public string ZipCode { get; set; }
         [Required]
         public string Country { get; set; }
+        public bool IsMale { get; set; }
         public List<Sanction> Sanctions { get; set; } = new();
 
     }
