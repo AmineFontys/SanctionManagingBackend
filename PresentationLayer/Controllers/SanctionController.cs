@@ -29,6 +29,24 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
             return Ok(sanctions);
         }
 
+        [HttpGet("GetByFlexworker/{flexworkerId}")]
+        public async Task<IActionResult> GetByFlexworker(int flexworkerId)
+        {
+            try
+            {
+                var sanctions = await _service.GetSanctionsByFlexworkerIdAsync(flexworkerId);
+
+                if (sanctions == null || !sanctions.Any())
+                    return Ok(new List<SanctionDTO>());
+
+                return Ok(sanctions);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Interne fout: {ex.Message}");
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<SanctionDTO>> GetById(int id)
         {
@@ -42,7 +60,7 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
             return Ok(sanction);
         }
 
-        [HttpPost("Add")]
+        [HttpPost("Create")]
         public async Task<ActionResult<SanctionDTO>> Add(SanctionDTO sanction)
         {
             if (sanction == null)
@@ -68,17 +86,26 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
             return Ok();
         }
 
-        [HttpDelete("Delete")]
-        public async Task<ActionResult> Delete(SanctionDTO sanction)
+        [HttpDelete("Delete/{id}")]
+        public async Task<ActionResult> Delete(int id)
         {
-            if (sanction == null)
-            {
-                return BadRequest("Sanctie is leeg.");
-            }
 
-            await _service.DeleteAsync(sanction);
+            await _service.DeleteAsync(id);
 
             return Ok();
+        }
+
+        [HttpGet("downloadPdf/{sanctionId}")]
+        public async Task<IActionResult> DownloadPdf(int sanctionId)
+        {
+            var pdfData = await _service.GetSanctionPdfAsync(sanctionId);
+
+            if (pdfData == null)
+            {
+                return NotFound("Sanctie of PDF niet gevonden.");
+            }
+
+            return File(pdfData, "application/pdf", $"Sanctie_{sanctionId}.pdf");
         }
     }
 }

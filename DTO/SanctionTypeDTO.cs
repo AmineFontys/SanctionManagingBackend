@@ -9,5 +9,6 @@
         public string Description { get; set; }
 
         public string StandardLetterTemplate { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

@@ -10,11 +10,13 @@ namespace SanctionManagingBackend.ApplicationLayer.Service
     {
         protected readonly IGenericRepository<TEntity> _repository;
         protected readonly IMapper _mapper;
+        protected readonly IUnitOfWork _unitOfWork;
 
-        public GenericService(IGenericRepository<TEntity> repository, IMapper mapper)
+        public GenericService(IGenericRepository<TEntity> repository, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _repository = repository;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IEnumerable<TDto>> GetAllAsync()
@@ -33,19 +35,21 @@ namespace SanctionManagingBackend.ApplicationLayer.Service
         {
             var entity = _mapper.Map<TEntity>(dto);
             await _repository.AddAsync(entity);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task UpdateAsync(TDto dto)
         {
             var entity = _mapper.Map<TEntity>(dto);
             _repository.Update(entity);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task DeleteAsync(TDto dto)
+        public async Task DeleteAsync(int id)
         {
-            var entity = _mapper.Map<TEntity>(dto);
-            _repository.Delete(entity);
-        }        
+            _repository.Delete(id);
+            await _unitOfWork.SaveAsync();
+        }
     }
 }
 

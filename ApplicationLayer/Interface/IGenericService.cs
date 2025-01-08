@@ -8,6 +8,6 @@ namespace SanctionManagingBackend.ApplicationLayer.Interface
         Task<TDto> GetByIdAsync(int id);
         Task AddAsync(TDto dto);
         Task UpdateAsync(TDto dto);
-        Task DeleteAsync(TDto dto);
+        Task DeleteAsync(int id);
     }
 }

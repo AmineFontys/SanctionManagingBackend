@@ -10,12 +10,14 @@ namespace SanctionManagingBackend.ApplicationLayer.Service
     {
         private readonly IEmployeeRepository _repository;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public EmployeeService(IEmployeeRepository repository, IMapper mapper)
-            : base(repository, mapper)
+        public EmployeeService(IEmployeeRepository repository, IMapper mapper, IUnitOfWork unitOfWork)
+            : base(repository, mapper, unitOfWork)
         {
             _repository = repository;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
     }

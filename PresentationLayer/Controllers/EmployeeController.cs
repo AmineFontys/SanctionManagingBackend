@@ -68,14 +68,9 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
         }
 
         [HttpDelete("Delete")]
-        public async Task<ActionResult> Delete(EmployeeDTO employee)
+        public async Task<ActionResult> Delete(int id)
         {
-            if (employee == null)
-            {
-                return BadRequest("Medewerker is leeg.");
-            }
-
-            await _service.DeleteAsync(employee);
+            await _service.DeleteAsync(id);
 
             return Ok();
         }

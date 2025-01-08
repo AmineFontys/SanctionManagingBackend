@@ -47,7 +47,7 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
             return Ok(flexworkers);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetById/{id}")]
         public async Task<ActionResult<FlexworkerDTO>> GetById(int id)
         {
             var flexworker = await _service.GetByIdAsync(id);
@@ -73,7 +73,7 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
             return Ok();
         }
 
-        [HttpPut("Update")]
+        [HttpPut("Update/{Flexworker}")]
         public async Task<ActionResult> Update([FromBody] FlexworkerDTO flexworker)
         {
             if (flexworker == null)
@@ -87,17 +87,13 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
         }
 
         [HttpDelete("Delete")]
-        public async Task<ActionResult> Delete([FromBody] FlexworkerDTO flexworker)
+        public async Task<ActionResult> Delete(int id)
         {
-            if (flexworker == null)
-            {
-                return BadRequest("Flexworker mag niet leeg zijn.");
-            }
-
-            await _service.DeleteAsync(flexworker);
+            await _service.DeleteAsync(id);
 
             return Ok();
         }
+
 
     }
 }

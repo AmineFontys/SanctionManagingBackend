@@ -42,7 +42,7 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
             return Ok(sanctionType);
         }
 
-        [HttpPost("Add")]
+        [HttpPost("Create")]
         public async Task<ActionResult<SanctionTypeDTO>> Add(SanctionTypeDTO sanctionType)
         {
             if (sanctionType == null)
@@ -71,14 +71,7 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
         [HttpDelete("Delete/{id}")]
         public async Task<ActionResult<SanctionTypeDTO>> Delete(int id)
         {
-            var sanctionType = await _service.GetByIdAsync(id);
-
-            if (sanctionType == null)
-            {
-                return NotFound($"Geen sanctietype gevonden met id: {id}");
-            }
-
-            await _service.DeleteAsync(sanctionType);
+            await _service.DeleteAsync(id);
 
             return Ok();
         }

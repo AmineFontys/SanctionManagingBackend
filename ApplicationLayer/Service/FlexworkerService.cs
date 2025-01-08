@@ -10,15 +10,17 @@ namespace SanctionManagingBackend.ApplicationLayer.Service
     {
         private readonly IFlexworkerRepository _repository;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public FlexworkerService(IFlexworkerRepository repository, IMapper mapper)
-            : base(repository, mapper)
+        public FlexworkerService(IFlexworkerRepository repository, IMapper mapper, IUnitOfWork unitOfWork)
+            : base(repository, mapper, unitOfWork)
         {
             _repository = repository;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
-        
+
         public async Task<IEnumerable<FlexworkerDTO>> GetByFullNameAsync(string fullName)
         {
             var flexworkers = await _repository.GetByFullNameAsync(fullName);
