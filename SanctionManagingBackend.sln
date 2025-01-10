@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SanctionManagingBackend", "SanctionManagingBackend.csproj", "{B3A11191-7FE2-430C-A79C-99832ED68995}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SanctionManagingUnitTest", "..\SanctionManagingUnitTest\SanctionManagingUnitTest.csproj", "{F8952CDC-6B69-4394-BE26-AC226ABA881E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{B3A11191-7FE2-430C-A79C-99832ED68995}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3A11191-7FE2-430C-A79C-99832ED68995}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3A11191-7FE2-430C-A79C-99832ED68995}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8952CDC-6B69-4394-BE26-AC226ABA881E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8952CDC-6B69-4394-BE26-AC226ABA881E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8952CDC-6B69-4394-BE26-AC226ABA881E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8952CDC-6B69-4394-BE26-AC226ABA881E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
