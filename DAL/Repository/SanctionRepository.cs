@@ -12,11 +12,19 @@ namespace SanctionManagingBackend.DAL.Repository
         public async Task<IEnumerable<Sanction>> GetSanctionsByFlexworkerIdAsync(int flexworkerId)
         {
             return await _context.Set<Sanction>()
+                .Include(s => s.SanctionTemplate) // Inclusief de gerelateerde SanctionTemplate
                 .AsNoTracking()
                 .Where(s => s.FlexworkerId == flexworkerId)
                 .ToListAsync();
         }
-
+        public async Task<bool> HasRecentWarningSanctionAsync(int flexworkerId, Category category, DateTime cutoffDate)
+        {
+            return await _context.Set<Sanction>()
+                .AnyAsync(s => s.FlexworkerId == flexworkerId
+                            && s.SanctionTemplate.Category == category
+                            && s.SanctionTemplate.Level == Level.Warning
+                            && s.CreatedAt >= cutoffDate);
+        }
         public async Task<byte[]> GetPdfByIdAsync(int sanctionId)
         {
             var sanction = await _context.Set<Sanction>()

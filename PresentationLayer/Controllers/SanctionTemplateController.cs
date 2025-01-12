@@ -7,17 +7,17 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SanctionTypeController : ControllerBase
+    public class SanctionTemplateController : ControllerBase
     {
-        private readonly ISanctionTypeService _service;
+        private readonly ISanctionTemplateService _service;
 
-        public SanctionTypeController(ISanctionTypeService service)
+        public SanctionTemplateController(ISanctionTemplateService service)
         {
             _service = service;
         }
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<SanctionTypeDTO>>> GetAll()
+        public async Task<ActionResult<IEnumerable<SanctionTemplateDTO>>> GetAll()
         {
             var sanctionTypes = await _service.GetAllAsync();
 
@@ -30,7 +30,7 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<SanctionTypeDTO>> GetById(int id)
+        public async Task<ActionResult<SanctionTemplateDTO>> GetById(int id)
         {
             var sanctionType = await _service.GetByIdAsync(id);
 
@@ -43,7 +43,7 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
         }
 
         [HttpPost("Create")]
-        public async Task<ActionResult<SanctionTypeDTO>> Add(SanctionTypeDTO sanctionType)
+        public async Task<ActionResult<SanctionTemplateDTO>> Add(SanctionTemplateDTO sanctionType)
         {
             if (sanctionType == null)
             {
@@ -56,7 +56,7 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
         }
 
         [HttpPut("Update")]
-        public async Task<ActionResult<SanctionTypeDTO>> Update(SanctionTypeDTO sanctionType)
+        public async Task<ActionResult<SanctionTemplateDTO>> Update(SanctionTemplateDTO sanctionType)
         {
             if (sanctionType == null)
             {
@@ -69,7 +69,7 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
-        public async Task<ActionResult<SanctionTypeDTO>> Delete(int id)
+        public async Task<ActionResult<SanctionTemplateDTO>> Delete(int id)
         {
             await _service.DeleteAsync(id);
 

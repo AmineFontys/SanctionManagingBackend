@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SanctionManagingBackend.Data.Entity
 {
-    public class SanctionType
+    public class SanctionTemplate
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -13,6 +13,26 @@ namespace SanctionManagingBackend.Data.Entity
         [MaxLength(100)]
         public string Description { get; set; }
         [Required]
+        public Level Level { get; set; }
+        [Required]
+        public Category Category { get; set; }
+        [Required]
         public string StandardLetterTemplate { get; set; }
+    }
+
+    public enum Level
+    {
+        FirstCallForContact,
+        SecondCallForContact,
+        Warning,
+        Suspension,
+        Termination
+    }
+    public enum Category
+    {
+        CallForContact,
+        NoShow,
+        Late,
+        General
     }
 }

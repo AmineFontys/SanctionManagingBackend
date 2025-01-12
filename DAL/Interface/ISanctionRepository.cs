@@ -6,5 +6,6 @@ namespace SanctionManagingBackend.DAL.Interface
     {
         Task<IEnumerable<Sanction>> GetSanctionsByFlexworkerIdAsync(int flexworkerId);
         Task<byte[]> GetPdfByIdAsync(int sanctionId);
+        Task<bool> HasRecentWarningSanctionAsync(int flexworkerId, Category category, DateTime cutoffDate);
     }
 }

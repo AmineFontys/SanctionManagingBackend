@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SanctionManagingBackend.ApplicationLayer.Interface;
+using SanctionManagingBackend.ApplicationLayer.Service;
 using SanctionManagingBackend.DTO;
 
 namespace SanctionManagingBackend.PresentationLayer.Controllers
@@ -61,17 +62,23 @@ namespace SanctionManagingBackend.PresentationLayer.Controllers
         }
 
         [HttpPost("Create")]
-        public async Task<ActionResult<SanctionDTO>> Add(SanctionDTO sanction)
+        public async Task<ActionResult> Create(CreateSanctionDTO dto)
         {
-            if (sanction == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Sanctie is leeg.");
+                return BadRequest(ModelState);
             }
 
-            await _service.AddAsync(sanction);
+            var result = await _service.CreateSanctionAsync(dto);
 
-            return Ok();
+            if (!result.Success)
+            {
+                return BadRequest(new { error = result.Error });
+            }
+
+            return Ok(new { message = "Sanctie succesvol aangemaakt." });
         }
+        
 
         [HttpPut("Update")]
         public async Task<ActionResult<SanctionDTO>> Update(SanctionDTO sanction)

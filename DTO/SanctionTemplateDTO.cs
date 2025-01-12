@@ -1,14 +1,16 @@
 ﻿namespace SanctionManagingBackend.DTO
 {
-    public class SanctionTypeDTO
+    public class SanctionTemplateDTO
     {
         public int Id { get; set; }
 
         public string Name { get; set; }
 
         public string Description { get; set; }
+        public int Level { get; set; }
+
+        public int Category { get; set; }
 
         public string StandardLetterTemplate { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

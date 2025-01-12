@@ -5,8 +5,8 @@ using SanctionManagingBackend.Data.Entity;
 
 namespace SanctionManagingBackend.DAL.Repository
 {
-    public class SanctionTypeRepository : GenericRepository<SanctionType>, ISanctionTypeRepository
+    public class SanctionTemplateRepository : GenericRepository<SanctionTemplate>, ISanctionTemplateRepository
     {
-        public SanctionTypeRepository(SanctionContext context) : base(context) { }
+        public SanctionTemplateRepository(SanctionContext context) : base(context) { }
     }
 }

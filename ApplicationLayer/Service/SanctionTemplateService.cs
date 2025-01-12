@@ -6,13 +6,13 @@ using SanctionManagingBackend.DTO;
 
 namespace SanctionManagingBackend.ApplicationLayer.Service
 {
-    public class SanctionTypeService : GenericService<SanctionType, SanctionTypeDTO>, ISanctionTypeService
+    public class SanctionTemplateService : GenericService<SanctionTemplate, SanctionTemplateDTO>, ISanctionTemplateService
     {
-        private readonly ISanctionTypeRepository _repository;
+        private readonly ISanctionTemplateRepository _repository;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-        public SanctionTypeService(ISanctionTypeRepository repository, IMapper mapper, IUnitOfWork unitOfWork)
+        public SanctionTemplateService(ISanctionTemplateRepository repository, IMapper mapper, IUnitOfWork unitOfWork)
             : base(repository, mapper, unitOfWork)
         {
             _repository = repository;

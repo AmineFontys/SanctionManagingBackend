@@ -63,15 +63,15 @@ namespace SanctionManagingBackend
         {
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddScoped(typeof(IGenericService<,>), typeof(GenericService<,>));
-
+            builder.Services.AddScoped<IEnumService, EnumService>();
             builder.Services.AddScoped<IFlexworkerRepository, FlexworkerRepository>();
             builder.Services.AddScoped<IFlexworkerService, FlexworkerService>();
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             builder.Services.AddScoped<ISanctionRepository, SanctionRepository>();
             builder.Services.AddScoped<ISanctionService, SanctionService>();
-            builder.Services.AddScoped<ISanctionTypeRepository, SanctionTypeRepository>();
-            builder.Services.AddScoped<ISanctionTypeService, SanctionTypeService>();
+            builder.Services.AddScoped<ISanctionTemplateRepository, SanctionTemplateRepository>();
+            builder.Services.AddScoped<ISanctionTemplateService, SanctionTemplateService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         }

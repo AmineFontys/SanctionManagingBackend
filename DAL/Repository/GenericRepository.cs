@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SanctionManagingBackend.DAL.Interface;
 using SanctionManagingBackend.Data.DBcontext;
+using System.Linq.Expressions;
 
 namespace SanctionManagingBackend.DAL.Repository
 {
@@ -15,14 +16,39 @@ namespace SanctionManagingBackend.DAL.Repository
             _dbSet = context.Set<T>();
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync(
+            Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            string includeProperties = "")
         {
-            return await _dbSet.AsNoTracking().ToListAsync();
+            IQueryable<T> query = _dbSet;
+
+            if (filter != null)
+                query = query.Where(filter);
+
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            if (orderBy != null)
+                return await orderBy(query).ToListAsync();
+            else
+                return await query.ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(int id, string includeProperties = "")
         {
-            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
+            IQueryable<T> query = _dbSet;
+
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            return await query.FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
         }
 
         public async Task AddAsync(T entity)

@@ -17,6 +17,6 @@ namespace SanctionManagingBackend.Data.DBcontext
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Flexworker> Flexworkers { get; set; }
         public DbSet<Sanction> Sanctions { get; set; }
-        public DbSet<SanctionType> SanctionTypes { get; set; }
+        public DbSet<SanctionTemplate> SanctionTemplate { get; set; }
     }
 }

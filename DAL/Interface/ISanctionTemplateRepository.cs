@@ -2,7 +2,7 @@
 
 namespace SanctionManagingBackend.DAL.Interface
 {
-    public interface ISanctionTypeRepository : IGenericRepository<SanctionType>
+    public interface ISanctionTemplateRepository : IGenericRepository<SanctionTemplate>
     {
     }
 }
